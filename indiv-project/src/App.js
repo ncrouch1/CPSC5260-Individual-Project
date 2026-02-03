@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './logo.png';
 import './App.css';
 
 function App() {
@@ -6,20 +6,24 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <form action={"/refactor"} method="post" className="form">
+          <label>
+            Code Box
+          </label>
+          <input
+            type="text"
+            className='input'
+            defaultValue={"Code goes in here..."}
+          />
+          <button>
+            Submit for refactor
+          </button>
+        </form>
+
       </header>
     </div>
   );
 }
+
 
 export default App;
