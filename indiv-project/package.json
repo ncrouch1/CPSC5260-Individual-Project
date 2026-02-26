@@ -7,9 +7,14 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
+    "buffer": "^6.0.3",
+    "code-stringify": "^2.0.3",
+    "diff": "^8.0.3",
     "react": "^19.2.4",
+    "react-diff-view": "^3.3.2",
     "react-dom": "^19.2.4",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
+    "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
