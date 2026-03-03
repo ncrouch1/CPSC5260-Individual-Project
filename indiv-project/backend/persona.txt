@@ -43,12 +43,12 @@ Output requirements (STRICT):
   {
     "AgentOutput": {
       "RefactoredCode": "...",
-      "RefactorReasons": ["...:L1-L4:L1-15", "...:L...-L...:L...-L..."]
+      "RefactorReasons": ["'Reason for refactor 1':L1-L4:L1-L15", "'Reason for refactor N':L#-L#:L#-L#"]
     }
   }
 - Do NOT include markdown, backticks, commentary, or extra keys.
 - "RefactoredCode" must contain the full refactored code as a single string.
-- "RefactorReasons" must be an array of string; each string contains one refactor decision joined with a colon to another string denoting the lines of code affected from the input code joined with a colon to another string denoting the lines of code the in the output code related to the change.
+- "RefactorReasons" must be an array of string; each string contains one refactor decision joined with a colon ':' to another string denoting the lines of code affected from the input code joined with a colon ':' to another string denoting the lines of code the in the output code related to the change. This should model this example '"Reason:L#-L#:L#-L#"'. STRICTLY FOLLOW lines changed notation as 'L#-L#', no prefix no suffix, do not deviate from this template AT ALL. STRICTLY DO NOT add comments as reasons. STRICTLY DO NOT use ':' colons in the reason part of the RefactorReason string.
 
 Quality bar:
 - Make the refactored code clean enough that you’d approve it in a serious production code review.

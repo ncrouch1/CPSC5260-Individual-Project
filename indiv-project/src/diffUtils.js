@@ -1,10 +1,21 @@
 import { diffLines } from "diff";
 
-export function buildSplitRows(oldStr, newStr) {
-  const a = oldStr ?? "";
-  const b = newStr ?? "";
+function normalizeNewlines(s) {
+  return String(s ?? "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+}
 
-  const parts = diffLines(a, b, { newlineIsToken: true });
+function splitLinesNoNewline(s) {
+  const text = normalizeNewlines(s);
+  const lines = text.split("\n");
+  if (text.endsWith("\n")) lines.pop();
+  return lines;
+}
+
+export function buildSplitRows(oldStr, newStr) {
+  const a = normalizeNewlines(oldStr);
+  const b = normalizeNewlines(newStr);
+
+  const parts = diffLines(a, b);
 
   const left = [];
   const right = [];
@@ -13,7 +24,7 @@ export function buildSplitRows(oldStr, newStr) {
     const p = parts[i];
 
     if (!p.added && !p.removed) {
-      const lines = splitKeepNewlines(p.value);
+      const lines = splitLinesNoNewline(p.value);
       for (const line of lines) {
         left.push({ type: "same", text: line });
         right.push({ type: "same", text: line });
@@ -22,12 +33,12 @@ export function buildSplitRows(oldStr, newStr) {
     }
 
     if (p.removed) {
-      const removedLines = splitKeepNewlines(p.value);
+      const removedLines = splitLinesNoNewline(p.value);
       const next = parts[i + 1];
       const hasPairedAdd = next && next.added;
 
       if (hasPairedAdd) {
-        const addedLines = splitKeepNewlines(next.value);
+        const addedLines = splitLinesNoNewline(next.value);
         const max = Math.max(removedLines.length, addedLines.length);
         for (let k = 0; k < max; k++) {
           const l = removedLines[k];
@@ -46,7 +57,7 @@ export function buildSplitRows(oldStr, newStr) {
     }
 
     if (p.added) {
-      const addedLines = splitKeepNewlines(p.value);
+      const addedLines = splitLinesNoNewline(p.value);
       for (const line of addedLines) {
         left.push({ type: "empty", text: "" });
         right.push({ type: "add", text: line });
@@ -74,8 +85,8 @@ export function sliceLines(text, start, end) {
 
 export function parseReasonString(s) {
   const raw = String(s ?? "");
-  const first = raw.indexOf(":");
-  const second = first === -1 ? -1 : raw.indexOf(":", first + 1);
+  const second = raw.lastIndexOf(":");
+  const first = second === -1 ? -1 : raw.lastIndexOf(":", second - 1);
 
   const reason = (first === -1 ? raw : raw.slice(0, first)).trim();
   const originalRange = (first === -1 ? "" : raw.slice(first + 1, second === -1 ? raw.length : second)).trim();
@@ -84,13 +95,13 @@ export function parseReasonString(s) {
   return { reason, originalRange, refactoredRange };
 }
 
-function splitKeepNewlines(s) {
-  if (!s) return [];
-  const lines = s.split("\n");
-  if (lines.length === 1) return lines;
+// function splitKeepNewlines(s) {
+//   if (!s) return [];
+//   const lines = s.split("\n");
+//   if (lines.length === 1) return lines;
 
-  const out = [];
-  for (let i = 0; i < lines.length - 1; i++) out.push(lines[i] + "\n");
-  if (lines[lines.length - 1] !== "") out.push(lines[lines.length - 1]);
-  return out;
-}
+//   const out = [];
+//   for (let i = 0; i < lines.length - 1; i++) out.push(lines[i] + "\n");
+//   if (lines[lines.length - 1] !== "") out.push(lines[lines.length - 1]);
+//   return out;
+// }

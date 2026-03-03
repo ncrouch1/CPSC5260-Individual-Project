@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import "./RefactorStudio.css";
+import "./App.css";
 import { buildSplitRows, parseLineRange, parseReasonString, sliceLines } from "./diffUtils";
 
 function StatusPill({ status }) {
